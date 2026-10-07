@@ -1,0 +1,27 @@
+# go2rtc configuration
+# Docs: https://github.com/AlexxIT/go2rtc
+# ${VARIABLES} are read from the environment (see .env.example).
+# After changing .env, recreate the container: docker compose up -d
+
+api:
+  listen: ":1984"
+
+rtsp:
+  listen: ":8554"
+
+webrtc:
+  listen: ":8555"
+  candidates:
+    # Address that WebRTC clients use to reach this host. Set WEBRTC_CANDIDATE
+    # in .env to the LAN/public IP of the docker host; "stun" auto-detects it.
+    - ${WEBRTC_CANDIDATE:stun}:8555
+
+streams:
+  # IP camera feeds. Add/remove entries as needed. Any source supported by
+  # go2rtc can be used (rtsp://, rtmp://, http://, onvif://, ffmpeg:, ...).
+  camera1: ${CAMERA1_URL}
+  camera2: ${CAMERA2_URL}
+
+  # Ingest stream for the rendered dashboard web page (pushed by the
+  # web-capture service). Leave the source empty.
+  dashboard:
