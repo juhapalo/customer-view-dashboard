@@ -45,7 +45,7 @@
   function renderCameras() {
     const container = document.getElementById("cameras");
     if (config.cameras.length === 0) {
-      message(container, "No cameras configured in config.js");
+      message(document.querySelector("main"), "No cameras configured in config.js");
       return;
     }
     for (const name of config.cameras) {
@@ -59,7 +59,7 @@
   function renderGrafana() {
     const container = document.getElementById("grafana");
     for (const panel of config.grafanaPanels) {
-      container.append(tile(panel.title || "", panel.url));
+      container.append(tile(panel.title || "Grafana panel", panel.url));
     }
   }
 

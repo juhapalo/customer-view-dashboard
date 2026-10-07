@@ -22,6 +22,10 @@ for _ in $(seq 1 50); do
   [ -e /tmp/.X11-unix/X99 ] && break
   sleep 0.2
 done
+if [ ! -e /tmp/.X11-unix/X99 ]; then
+  echo "web-capture: Xvfb did not start" >&2
+  exit 1
+fi
 
 chromium \
   --no-sandbox \
