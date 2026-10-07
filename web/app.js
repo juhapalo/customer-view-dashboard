@@ -6,7 +6,6 @@
       title: "Customer view",
       go2rtcUrl: "/go2rtc/",
       cameras: [],
-      excludeStreams: ["dashboard"],
       streamMode: "webrtc,mse,hls,mjpeg",
       grafanaPanels: [],
       reloadIntervalMinutes: 0,
@@ -28,6 +27,7 @@
 
     const frame = document.createElement("iframe");
     frame.src = src;
+    frame.title = label;
     frame.setAttribute("allow", "autoplay; fullscreen");
     frame.setAttribute("loading", "eager");
 
@@ -42,27 +42,17 @@
     container.append(div);
   }
 
-  async function streamNames() {
-    if (config.cameras.length > 0) return config.cameras;
-    const res = await fetch(new URL("api/streams", go2rtcBase));
-    if (!res.ok) throw new Error("go2rtc API returned " + res.status);
-    const streams = await res.json();
-    return Object.keys(streams)
-      .filter((name) => !config.excludeStreams.includes(name))
-      .sort();
-  }
-
-  async function renderCameras() {
+  function renderCameras() {
     const container = document.getElementById("cameras");
-    try {
-      for (const name of await streamNames()) {
-        const url = new URL("stream.html", go2rtcBase);
-        url.searchParams.set("src", name);
-        url.searchParams.set("mode", mode);
-        container.append(tile(name, url.href));
-      }
-    } catch (err) {
-      message(container, "Unable to load camera streams: " + err.message);
+    if (config.cameras.length === 0) {
+      message(container, "No cameras configured in config.js");
+      return;
+    }
+    for (const name of config.cameras) {
+      const url = new URL("stream.html", go2rtcBase);
+      url.searchParams.set("src", name);
+      url.searchParams.set("mode", mode);
+      container.append(tile(name, url.href));
     }
   }
 

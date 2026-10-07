@@ -1,6 +1,7 @@
 # go2rtc configuration
 # Docs: https://github.com/AlexxIT/go2rtc
 # ${VARIABLES} are read from the environment (see .env.example).
+# After changing .env, recreate the container: docker compose up -d
 
 api:
   listen: ":1984"

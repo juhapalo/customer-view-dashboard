@@ -10,11 +10,12 @@ SCREEN_WIDTH="${SCREEN_WIDTH:-1920}"
 SCREEN_HEIGHT="${SCREEN_HEIGHT:-1080}"
 FRAMERATE="${FRAMERATE:-15}"
 VIDEO_BITRATE="${VIDEO_BITRATE:-4M}"
+STARTUP_DELAY="${STARTUP_DELAY:-5}"
 
 export DISPLAY=:99
 PROFILE_DIR="$(mktemp -d)"
 
-rm -f /tmp/.X99-lock
+rm -f /tmp/.X99-lock /tmp/.X11-unix/X99
 Xvfb "$DISPLAY" -screen 0 "${SCREEN_WIDTH}x${SCREEN_HEIGHT}x24" -nolisten tcp &
 
 for _ in $(seq 1 50); do
@@ -40,7 +41,7 @@ chromium \
   "$CAPTURE_URL" &
 
 # Give the page time to load before streaming starts
-sleep 5
+sleep "$STARTUP_DELAY"
 
 ffmpeg -hide_banner -loglevel warning \
   -f x11grab -draw_mouse 0 -framerate "$FRAMERATE" \

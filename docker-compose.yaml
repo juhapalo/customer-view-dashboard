@@ -13,7 +13,9 @@ services:
     volumes:
       - ./go2rtc/go2rtc.yaml:/config/go2rtc.yaml
     ports:
-      - "${GO2RTC_API_PORT:-1984}:1984/tcp"    # Web UI + HTTP API (MSE/HLS/MJPEG/WebRTC signalling)
+      # Web UI + full HTTP API (can edit config and reveals camera URLs) -> localhost only by default.
+      # Viewers use the dashboard container (port 8080, /go2rtc/...) instead.
+      - "${GO2RTC_API_BIND:-127.0.0.1}:${GO2RTC_API_PORT:-1984}:1984/tcp"
       - "${GO2RTC_RTSP_PORT:-8554}:8554/tcp"   # RTSP output, e.g. rtsp://<host>:8554/camera1
       - "${GO2RTC_WEBRTC_PORT:-8555}:8555/tcp" # WebRTC media
       - "${GO2RTC_WEBRTC_PORT:-8555}:8555/udp" # WebRTC media
@@ -49,4 +51,5 @@ services:
       SCREEN_WIDTH: ${CAPTURE_WIDTH:-1920}
       SCREEN_HEIGHT: ${CAPTURE_HEIGHT:-1080}
       FRAMERATE: ${CAPTURE_FRAMERATE:-15}
+      STARTUP_DELAY: ${CAPTURE_STARTUP_DELAY:-5}
       VIDEO_BITRATE: ${CAPTURE_BITRATE:-4M}

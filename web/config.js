@@ -7,10 +7,8 @@ window.DASHBOARD_CONFIG = {
   // container, so it works both for viewers and for the web-capture service.
   go2rtcUrl: "/go2rtc/",
 
-  // go2rtc stream names to show. Leave empty to show every stream defined
-  // in go2rtc.yaml except the ones listed in excludeStreams.
-  cameras: [],
-  excludeStreams: ["dashboard"],
+  // go2rtc stream names (from go2rtc/go2rtc.yaml) to show on the page.
+  cameras: ["camera1", "camera2"],
 
   // go2rtc player modes in order of preference. Can be overridden with
   // ?mode=... in the page URL (web-capture uses ?mode=mse).
